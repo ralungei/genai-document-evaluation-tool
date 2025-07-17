@@ -2,6 +2,7 @@ import { AutoAwesome } from "@mui/icons-material";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import DocumentPeekStack from "./DocumentFanStack";
 
 export default function AnalysisResult({
@@ -178,7 +179,7 @@ export default function AnalysisResult({
           </motion.div>
 
           {/* Evaluation Result - solo en la columna derecha */}
-          <Box sx={{ mt: "20px", flex: 1, maxWidth: 600 }}>
+          <Box sx={{ mt: "20px", flex: 1, maxWidth: "100%", overflow: "auto" }}>
             {input && (
               <motion.div
                 initial={{ x: 100, opacity: 0 }}
@@ -221,9 +222,39 @@ export default function AnalysisResult({
                         borderRadius: 1,
                         fontSize: "0.9em",
                       },
+                      "& table": {
+                        width: "100%",
+                        borderCollapse: "collapse",
+                        mb: 2,
+                        minWidth: "500px",
+                      },
+                      "& .table-container": {
+                        overflowX: "auto",
+                        mb: 2,
+                      },
+                      "& th, & td": {
+                        border: (theme) => `1px solid ${theme.palette.divider}`,
+                        padding: "8px 12px",
+                        textAlign: "left",
+                      },
+                      "& th": {
+                        backgroundColor: (theme) => theme.palette.action.hover,
+                        fontWeight: "bold",
+                      },
                     }}
                   >
-                    <ReactMarkdown>{input}</ReactMarkdown>
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        table: ({ children, ...props }) => (
+                          <div className="table-container">
+                            <table {...props}>{children}</table>
+                          </div>
+                        ),
+                      }}
+                    >
+                      {input}
+                    </ReactMarkdown>
                   </Box>
                 </Box>
               </motion.div>

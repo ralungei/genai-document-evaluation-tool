@@ -1,21 +1,16 @@
 "use client";
 
 import {
-  AccountTreeRounded,
   Add,
-  AssessmentRounded,
   AttachFile,
   BugReport,
   CheckCircle,
   Close,
-  FileCopyRounded,
   InfoOutlined,
   RemoveCircle,
   Rule,
-  SecurityRounded,
   TextFields,
   UploadFile,
-  VerifiedRounded,
 } from "@mui/icons-material";
 import {
   alpha,
@@ -264,6 +259,14 @@ ${Object.entries(
   .map(([key, value]) => `- **${key}**: ${value}`)
   .join("\n")}
 
+### Eligibility Summary Table
+
+| Applicant Name | Completeness | Financial Sufficiency | Passport Validity | Employment/Sponsorship Validity | Category |
+|---------------------|--------------------|-----------------------|-------------------|---------------------------------|-------------------|
+| Kelly Cruz | Yes | Yes | Yes | Yes | Eligible |
+| David Jenkins | Yes | Info not available | Yes | Yes | Requires Review |
+| Tiffany Hernandez | Yes | Yes | Yes | Yes | Eligible |
+
 This is a mock evaluation for development purposes.`;
 
     setResponse(mockResponse);
@@ -506,27 +509,34 @@ This is a mock evaluation for development purposes.`;
                       disabled={
                         !attachedFiles.length ||
                         (criteriaMode === "manual"
-                          ? !manualCriteria.some((c) => c.key.trim() && c.value.trim())
+                          ? !manualCriteria.some(
+                              (c) => c.key.trim() && c.value.trim()
+                            )
                           : !csvFile)
                       }
                       pulseEnabled={
                         attachedFiles.length > 0 &&
                         (criteriaMode === "manual"
-                          ? manualCriteria.some((c) => c.key.trim() && c.value.trim())
+                          ? manualCriteria.some(
+                              (c) => c.key.trim() && c.value.trim()
+                            )
                           : csvFile)
                       }
-                      sx={{ 
+                      sx={{
                         textTransform: "none",
-                        animation: (!attachedFiles.length || 
-                          (criteriaMode === "manual" 
-                            ? !manualCriteria.some((c) => c.key.trim() && c.value.trim()) 
-                            : !csvFile)) 
-                          ? "none" 
-                          : "pulse 2s ease-in-out infinite",
+                        animation:
+                          !attachedFiles.length ||
+                          (criteriaMode === "manual"
+                            ? !manualCriteria.some(
+                                (c) => c.key.trim() && c.value.trim()
+                              )
+                            : !csvFile)
+                            ? "none"
+                            : "pulse 2s ease-in-out infinite",
                         "@keyframes pulse": {
                           "0%, 100%": { transform: "scale(1)", opacity: 1 },
-                          "50%": { transform: "scale(1.02)", opacity: 0.9 }
-                        }
+                          "50%": { transform: "scale(1.02)", opacity: 0.9 },
+                        },
                       }}
                     >
                       Evaluate
@@ -1053,9 +1063,9 @@ This is a mock evaluation for development purposes.`;
                           }}
                         >
                           {criteriaMode === "manual" && (
-                            <CriteriaIndicators 
-                              criteria={manualCriteria} 
-                              loading={loading} 
+                            <CriteriaIndicators
+                              criteria={manualCriteria}
+                              loading={loading}
                             />
                           )}
                         </Box>
